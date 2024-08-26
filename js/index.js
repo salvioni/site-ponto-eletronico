@@ -1,11 +1,18 @@
 const diaSemana = document.getElementById("dia-semana")
 const dataAtual = document.getElementById("data-atual")
 const horaAtual = document.getElementById("hora-atual")
+const btnRegistrarPonto = document.getElementById("btn-registrar")
 
+//btnRegistrarPonto.addEventListener("click", register());
 
-function updateContent() {
-    diaSemana.textContent = getCurrentDay();
-    dataAtual.textContent = getCurrentDate();
+diaSemana.textContent = getCurrentDay();
+dataAtual.textContent = getCurrentDate();
+
+function register() {
+    alert("Bateu Ponto.");
+}
+
+function updateTime() {
     horaAtual.textContent = getCurrentTime();
 }
 
@@ -27,21 +34,18 @@ function getCurrentDay() {
     const date = new Date()
     const day = date.getDay()
     const daynames = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira"]
-    return daynames[day]
+    return daynames[day];
 }
 
-//Retorna o numero colocado garantindo que tem duas casas decimais
-function twoHouses(number) {
-    if (number < 10) {
-        return "0" + number
-    } else {
-        return number
-    }
+//Retorna a função colocada como string garantindo que tem duas casas decimais
+function twoHouses(x) {
+   return String(x).padStart(2, '0');
 }
 
-
-setInterval(updateContent, 1000)
+updateTime();
+setInterval(updateTime, 1000)
 
 console.log(getCurrentDate());
 console.log(getCurrentTime());
 console.log(getCurrentDay());
+
