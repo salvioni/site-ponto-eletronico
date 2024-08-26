@@ -1,0 +1,23 @@
+.data-hora {
+    text-align: center;
+}
+
+#dia-semana {
+    margin-bottom: 0px;
+    font-size: 20px;
+}
+
+#data-atual {
+    margin-top: 0px;
+    font-size: 30px;
+}
+
+#hora-atual {
+    font-size: 90px;
+}
+
+.b-registro {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
