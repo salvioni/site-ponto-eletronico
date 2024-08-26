@@ -3,7 +3,7 @@ const dataAtual = document.getElementById("data-atual")
 const horaAtual = document.getElementById("hora-atual")
 const btnRegistrarPonto = document.getElementById("btn-registrar")
 
-//btnRegistrarPonto.addEventListener("click", register());
+//btnRegistrarPonto.addEventListener("click", register);
 
 diaSemana.textContent = getCurrentDay();
 dataAtual.textContent = getCurrentDate();
