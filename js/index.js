@@ -1,35 +1,53 @@
-const diaSemana = document.getElementById("dia-semana")
-const dataAtual = document.getElementById("data-atual")
-const horaAtual = document.getElementById("hora-atual")
+navigator.geolocation.getCurrentPosition((position) => {
+    console.log(position);
+    console.log(position.coords.latitude);
+    console.log(position.coords.longitude);
+})
+
+const diaSemana = document.getElementById("dia-semana");
+const dataAtual = document.getElementById("data-atual");
+const horaAtual = document.getElementById("hora-atual");
+const dialogPonto = document.getElementById("dialog-ponto");
+
+const dialogData = document.getElementById("dialog-data");
+dialogData.textContent = getCurrentDate();
+
+const dialogHora = document.getElementById("dialog-hora");
+dialogHora.textContent = getCurrentTime();
+
 const btnRegistrarPonto = document.getElementById("btn-registrar")
+btnRegistrarPonto.addEventListener("click", () => {
+    dialogPonto.showModal();
+})
 
-btnRegistrarPonto.addEventListener("click", register);
-
-diaSemana.textContent = getCurrentDay();
-dataAtual.textContent = getCurrentDate();
-
-function register() {
-    alert("Bateu Ponto.");
-}
+const btnDialogFechar = document.getElementById("btn-dialog-fechar");
+btnDialogFechar.addEventListener("click", () => {
+    dialogPonto.close();
+})
 
 function updateTime() {
     horaAtual.textContent = getCurrentTime();
+    dialogHora.textContent = getCurrentTime();
 }
 
-//Retorna a hora atual (hora:minuto:segundo)
+//Pega o dia e a data quando abre o site
+diaSemana.textContent = getCurrentDay();
+dataAtual.textContent = getCurrentDate();
+
+//Retorna a hora atual formatada (hora:minuto:segundo)
 function getCurrentTime() {
     const date = new Date()
     return twoHouses(date.getHours()) + ":" + twoHouses(date.getMinutes()) + ":" + twoHouses(date.getSeconds());
 }
 
-//Retorna a data atual (dia/mês/ano)
+//Retorna a data atual formatada (dia/mês/ano)
 function getCurrentDate() {
     const date = new Date()
     let month = date.getMonth() + 1
     return twoHouses(date.getDate()) + "/" + twoHouses(month) + "/" + date.getFullYear();
 }
 
-//Retorna o dia da semana atual (Domingo)
+//Retorna o dia da semana atual formatada (Domingo)
 function getCurrentDay() {
     const date = new Date()
     const day = date.getDay()
@@ -48,4 +66,3 @@ setInterval(updateTime, 1000)
 console.log(getCurrentDate());
 console.log(getCurrentTime());
 console.log(getCurrentDay());
-

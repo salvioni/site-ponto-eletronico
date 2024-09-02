@@ -25,3 +25,19 @@ p {
     margin-left: auto;
     margin-right: auto;
 }
+
+#btn-dialog-fechar{
+    background-color:rgb(240, 16, 16);
+    width: 35px;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 15px;
+}
+
+#dialog-ponto{
+    width: 200px;
+    height: 150px;
+    border: 0px;
+    padding: 20px;
+}
