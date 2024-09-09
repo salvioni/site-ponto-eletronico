@@ -25,6 +25,16 @@ btnDialogFechar.addEventListener("click", () => {
     dialogPonto.close();
 })
 
+const btnDialogEntrada = document.getElementById("btn-dialog-entrada");
+btnDialogFechar.addEventListener("click", () => {
+    console.log(getObjectRegister("entrada"));
+});
+
+const btnDialogSaida = document.getElementById("btn-dialog-saida");
+btnDialogFechar.addEventListener("click", () => {
+    console.log(getObjectRegister("saida"));
+});
+
 function updateTime() {
     horaAtual.textContent = getCurrentTime();
     dialogHora.textContent = getCurrentTime();
@@ -33,6 +43,32 @@ function updateTime() {
 //Pega o dia e a data quando abre o site
 diaSemana.textContent = getCurrentDay();
 dataAtual.textContent = getCurrentDate();
+
+let locationUser = {};
+
+function getUserLocation() {
+    navigator.geolocation.getCurrentPosition((position) => {
+        let userLocation = {
+            "lat": position.coords.latitude,
+            "long": position.coords.longitude
+        }
+        locationUser = userLocation;
+        console.log(locationUser);
+    });
+}
+
+function getObjectRegister(registerType) {
+    getUserLocation();
+
+    ponto = {
+        "date": getCurrentDate(),
+        "time": getCurrentTime(),
+        "location": locationUser,
+        "id": 1,
+        "type": registerType
+    }
+    return ponto;
+}
 
 //Retorna a hora atual formatada (hora:minuto:segundo)
 function getCurrentTime() {
