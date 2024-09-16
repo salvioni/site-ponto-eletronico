@@ -25,15 +25,29 @@ btnDialogFechar.addEventListener("click", () => {
     dialogPonto.close();
 })
 
+const selectRegisterType = document.getElementById("register-type");
+
+const btnDialogRegistrar = document.getElementById("btn-dialog-registrar");
+btnDialogRegistrar.addEventListener("click", () => {
+
+    let register = getObjectRegister(selectRegisterType.value);
+
+    saveLocalStorage(JSON.stringify(register));
+
+    dialogPonto.close();
+});
+
+/*
 const btnDialogEntrada = document.getElementById("btn-dialog-entrada");
-btnDialogFechar.addEventListener("click", () => {
-    console.log(getObjectRegister("entrada"));
+btnDialogEntrada.addEventListener("click", () => {
+    saveLocalStorage(JSON.stringify(getObjectRegister("entrada")));
 });
 
 const btnDialogSaida = document.getElementById("btn-dialog-saida");
-btnDialogFechar.addEventListener("click", () => {
-    console.log(getObjectRegister("saida"));
+btnDialogSaida.addEventListener("click", () => {
+    saveLocalStorage(JSON.stringify(getObjectRegister("saida")));
 });
+*/
 
 function updateTime() {
     horaAtual.textContent = getCurrentTime();
@@ -53,22 +67,9 @@ function getUserLocation() {
             "long": position.coords.longitude
         }
         locationUser = userLocation;
-        console.log(locationUser);
     });
 }
 
-function getObjectRegister(registerType) {
-    getUserLocation();
-
-    ponto = {
-        "date": getCurrentDate(),
-        "time": getCurrentTime(),
-        "location": locationUser,
-        "id": 1,
-        "type": registerType
-    }
-    return ponto;
-}
 
 //Retorna a hora atual formatada (hora:minuto:segundo)
 function getCurrentTime() {
@@ -91,9 +92,31 @@ function getCurrentDay() {
     return daynames[day];
 }
 
+//Retorna um objeto json
+function getObjectRegister(registerType) {
+    getUserLocation();
+
+    ponto = {
+        "date": getCurrentDate(),
+        "time": getCurrentTime(),
+        "location": locationUser,
+        "id": 1,
+        "type": registerType,
+    }
+    return ponto;
+}
+
 //Retorna a função colocada como string garantindo que tem duas casas decimais
 function twoHouses(x) {
    return String(x).padStart(2, '0');
+}
+
+function saveLocalStorage(key){
+    localStorage.setItem("register", key)
+}
+
+function getLocalStorage(key){
+    //
 }
 
 updateTime();
