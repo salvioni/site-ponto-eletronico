@@ -2,6 +2,17 @@ p {
     font-family:Verdana;
 }
 
+button {
+    font-family: Verdana;
+}
+
+select {
+    font-family: Verdana;
+    width: 200px;
+    height: 50px;
+    font-size: 20px;
+}
+
 .data-hora {
     text-align: center;
 }
@@ -35,9 +46,24 @@ p {
     font-size: 15px;
 }
 
-#dialog-ponto{
+#btn-registrar{
     width: 200px;
-    height: 150px;
+    height: 55px;
+    border-radius: 20px;
+    font-size: 20px;
+    
+}
+
+#btn-dialog-registrar {
+    font-size: 20px;
+    width: 150px;
+    height: 50px;
+}
+
+#dialog-ponto{
+    width: 500px;
+    height: 300px;
     border: 0px;
-    padding: 20px;
+    padding: 30px;
+    font-size: 30px;
 }

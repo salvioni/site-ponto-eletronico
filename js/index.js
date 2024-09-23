@@ -1,127 +1,117 @@
-navigator.geolocation.getCurrentPosition((position) => {
-    console.log(position);
-    console.log(position.coords.latitude);
-    console.log(position.coords.longitude);
-})
-
+// Elementos do DOM
 const diaSemana = document.getElementById("dia-semana");
 const dataAtual = document.getElementById("data-atual");
 const horaAtual = document.getElementById("hora-atual");
 const dialogPonto = document.getElementById("dialog-ponto");
-
 const dialogData = document.getElementById("dialog-data");
-dialogData.textContent = getCurrentDate();
-
 const dialogHora = document.getElementById("dialog-hora");
-dialogHora.textContent = getCurrentTime();
-
-const btnRegistrarPonto = document.getElementById("btn-registrar")
-btnRegistrarPonto.addEventListener("click", () => {
-    dialogPonto.showModal();
-})
-
+const btnRegistrarPonto = document.getElementById("btn-registrar");
 const btnDialogFechar = document.getElementById("btn-dialog-fechar");
-btnDialogFechar.addEventListener("click", () => {
-    dialogPonto.close();
-})
-
 const selectRegisterType = document.getElementById("register-type");
-
 const btnDialogRegistrar = document.getElementById("btn-dialog-registrar");
-btnDialogRegistrar.addEventListener("click", () => {
 
-    let register = getObjectRegister(selectRegisterType.value);
+// Variáveis globais
+let locationUser = {};
+let registersLocalStorage = getRegisterLocalStorage("register");
 
-    saveLocalStorage(JSON.stringify(register));
-
-    dialogPonto.close();
-});
-
-/*
-const btnDialogEntrada = document.getElementById("btn-dialog-entrada");
-btnDialogEntrada.addEventListener("click", () => {
-    saveLocalStorage(JSON.stringify(getObjectRegister("entrada")));
-});
-
-const btnDialogSaida = document.getElementById("btn-dialog-saida");
-btnDialogSaida.addEventListener("click", () => {
-    saveLocalStorage(JSON.stringify(getObjectRegister("saida")));
-});
-*/
+// Funções
+function getUserLocation() {
+    navigator.geolocation.getCurrentPosition((position) => {
+        locationUser.lat = position.coords.latitude;
+        locationUser.long = position.coords.longitude;
+    });
+}
 
 function updateTime() {
     horaAtual.textContent = getCurrentTime();
     dialogHora.textContent = getCurrentTime();
 }
 
-//Pega o dia e a data quando abre o site
-diaSemana.textContent = getCurrentDay();
-dataAtual.textContent = getCurrentDate();
-
-let locationUser = {};
-
-function getUserLocation() {
-    navigator.geolocation.getCurrentPosition((position) => {
-        let userLocation = {
-            "lat": position.coords.latitude,
-            "long": position.coords.longitude
-        }
-        locationUser = userLocation;
-    });
-}
-
-
-//Retorna a hora atual formatada (hora:minuto:segundo)
 function getCurrentTime() {
-    const date = new Date()
+    const date = new Date();
     return twoHouses(date.getHours()) + ":" + twoHouses(date.getMinutes()) + ":" + twoHouses(date.getSeconds());
 }
 
-//Retorna a data atual formatada (dia/mês/ano)
 function getCurrentDate() {
-    const date = new Date()
-    let month = date.getMonth() + 1
+    const date = new Date();
+    const month = date.getMonth() + 1;
     return twoHouses(date.getDate()) + "/" + twoHouses(month) + "/" + date.getFullYear();
 }
 
-//Retorna o dia da semana atual formatada (Domingo)
 function getCurrentDay() {
-    const date = new Date()
-    const day = date.getDay()
-    const daynames = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira"]
-    return daynames[day];
+    const date = new Date();
+    const day = date.getDay();
+    const dayNames = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
+    return dayNames[day];
 }
 
-//Retorna um objeto json
 function getObjectRegister(registerType) {
-    getUserLocation();
-
-    ponto = {
-        "date": getCurrentDate(),
-        "time": getCurrentTime(),
-        "location": locationUser,
-        "id": 1,
-        "type": registerType,
-    }
-    return ponto;
+    return {
+        date: getCurrentDate(),
+        time: getCurrentTime(),
+        location: locationUser,
+        id: registersLocalStorage.length + 1,
+        type: registerType,
+    };
 }
 
-//Retorna a função colocada como string garantindo que tem duas casas decimais
 function twoHouses(x) {
-   return String(x).padStart(2, '0');
+    return String(x).padStart(2, '0');
 }
 
-function saveLocalStorage(key){
-    localStorage.setItem("register", key)
+function saveRegisterLocalStorage(key) {
+    registersLocalStorage.push(key);
+    localStorage.setItem("register", JSON.stringify(registersLocalStorage));
 }
 
-function getLocalStorage(key){
-    //
+function getRegisterLocalStorage(key) {
+    const registers = localStorage.getItem(key);
+    if(!registers) {
+        return [];
+    }
+    return JSON.parse(registers);
 }
 
+function setRegisterType() {
+    const lastType = localStorage.getItem("lastRegisterType") || "entrada";
+    const nextType = {
+        "entrada": "intervalo",
+        "intervalo": "volta-intervalo",
+        "volta-intervalo": "saida",
+        "saida": "entrada"
+    };
+    selectRegisterType.value = nextType[lastType];
+}
+
+// Inicialização da página
+diaSemana.textContent = getCurrentDay();
+dataAtual.textContent = getCurrentDate();
+dialogData.textContent = getCurrentDate();
+dialogHora.textContent = getCurrentTime();
+setRegisterType();
+getUserLocation();
+
+// Eventos
+btnRegistrarPonto.addEventListener("click", () => {
+    dialogPonto.showModal();
+});
+
+btnDialogFechar.addEventListener("click", () => {
+    dialogPonto.close();
+});
+
+btnDialogRegistrar.addEventListener("click", () => {
+    const register = getObjectRegister(selectRegisterType.value);
+    saveRegisterLocalStorage(register);
+    localStorage.setItem("lastRegisterType", selectRegisterType.value);
+    dialogPonto.close();
+});
+
+// Atualiza o tempo a cada segundo
 updateTime();
-setInterval(updateTime, 1000)
+setInterval(updateTime, 1000);
 
+// Log de dados atuais
 console.log(getCurrentDate());
 console.log(getCurrentTime());
 console.log(getCurrentDay());
